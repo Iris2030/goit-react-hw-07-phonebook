@@ -6,11 +6,18 @@ import ContactList from './Components/ContactList/ContactList';
 import Filter from './Components/Filter/Filter';
 import Container from './Components/Container/Container';
 import s from './App.module.css';
+// import fetchContacts from './redux/operations';
+// import { useDispatch } from 'react-redux';
+import { useFetchContactsQuery } from './redux/slice';
 
 
 
 
 export default function App() {
+// const dispatch = useDispatch()
+// dispatch(fetchContacts())
+// const { data, error, isLoading } = useFetchContactsQuery()
+
 const contacts = useSelector(state =>  state.contacts)
 
   useEffect(() => {

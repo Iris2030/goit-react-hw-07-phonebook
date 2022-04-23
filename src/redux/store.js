@@ -2,14 +2,19 @@
 import contactsReducer from './reducer'
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import logger from 'redux-logger';
+import { contactsApi } from './slice'
 
 
-const middleware = [...getDefaultMiddleware(), logger]
+
+const middleware = [...getDefaultMiddleware(), logger, contactsApi.middleware]
 
 const store = configureStore({
-    reducer:contactsReducer,
+    reducer:{
+        contacts: contactsReducer,
+        [contactsApi.reducerPath]: contactsApi.reducer,
+    },
 devTools: process.env.NODE_ENV === 'development',
-middleware
+middleware,
 })
 
 export default store
