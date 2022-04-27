@@ -1,8 +1,10 @@
 .container{
-    width: 600px;
+    margin-top: 60px;
+    width: 700px;
     height: 100%;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     margin-right: auto;
     margin-left: auto;
     text-align: center;
+    background-color: rgba(65, 65, 66, 0.342);
 }

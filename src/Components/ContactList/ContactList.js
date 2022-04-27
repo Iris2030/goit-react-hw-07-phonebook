@@ -2,25 +2,29 @@ import ContactListItem from "../ContactListItem/ContactListItem";
 import s from "./ContactList.module.css";
 // import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
+import {useDeleteContactMutation } from '../../redux/slice';
 
 
-export default function ContactList() {
+export default function ContactList({data}) {
+const [deleteContact] = useDeleteContactMutation()
+
 
   const contacts = useSelector(state =>{
-    return state.contacts.items.filter(contact =>{
+    return data && data.filter(contact =>{
         return contact.name.toLowerCase().includes(state.contacts.filter.toLowerCase())
       })
-
   })
+
 
   return (
     <ul className={s.list}>
-      {contacts.map((contact) => (
+      {data && contacts.map((contact) => (
         <ContactListItem
           key={contact.id}
           id={contact.id}
           name={contact.name}
-          number={contact.number}
+          number={contact.phone}
+          onDelete={deleteContact}
         />
       ))}
     </ul>

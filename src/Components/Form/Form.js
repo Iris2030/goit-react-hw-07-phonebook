@@ -1,15 +1,19 @@
 import { useState } from "react";
 import s from "./Form.module.css";
-// import PropTypes from "prop-types";
-import { useSelector,useDispatch } from "react-redux";
-import {addContact} from '../../redux/actions'
+import PropTypes from "prop-types";
+// import { useSelector,useDispatch } from "react-redux";
+// import {addContact} from '../../redux/actions'
+import {useAddContactMutation} from "../../redux/slice";
+import Notiflix from "notiflix";
+import Loader from "../Loader/Loader";
 
- export default function Form() {
+ export default function Form({contacts}) {
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
+  const [addContact,{isLoading}] = useAddContactMutation()
 
-  const contacts = useSelector(state =>state.contacts.items)
-  const dispatch = useDispatch()
+  // const contacts = useSelector(state =>state.contacts.items)
+  // const dispatch = useDispatch()
 
 
   const handleInput = (event) => {
@@ -40,8 +44,9 @@ console.log(contacts);
       return;
     }
 
-    dispatch(addContact(name, number))
-
+    // dispatch(addContact(name, number))
+    addContact(name, number)
+    Notiflix.Notify.success(`${name} added to contacts`);
     resetForm();
   };
 
@@ -75,16 +80,18 @@ console.log(contacts);
         title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
         required
       />
-
-      <button className={s.button} type="submit">
-        Add contact
-      </button>
+ 
+      <button className={s.button} type="submit" disabled={isLoading}>
+        Add contact {isLoading && '...'}
+      </button>  
+     
+ 
     </form>
   );
 }
 
-// Form.propTypes = {
-//   addContact: PropTypes.func.isRequired,
-//   contacts: PropTypes.array.isRequired,
-// };
+Form.propTypes = {
+  // addContact: PropTypes.func.isRequired,
+contacts: PropTypes.array.isRequired,
+};
 
