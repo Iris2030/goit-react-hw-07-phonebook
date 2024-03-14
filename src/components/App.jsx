@@ -16,13 +16,5 @@ export const App = () => {
     <Filter />
     <ContactList></ContactList>
   </Container>
-
-    // <div className={styles['main-container']}>
-    //   <h1>Phonebook</h1>
-    //   <ContactForm />
-    //   <h2>Contacts</h2>
-    //   <Filter />
-    //   <ContactList />
-    // </div>
   );
 };

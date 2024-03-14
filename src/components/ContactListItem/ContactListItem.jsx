@@ -9,7 +9,7 @@ export const ContactListItem = ({ contact }) => {
   const isLoading = useSelector(getLoadingStatus);
 
   return (
-    <li  key={contact.id}  className={s.item}>{contact.name}:{contact.phone} 
+    <li  key={contact.id}  className={s.item}>{contact.name}: {contact.phone} 
     <button
       type="button"
       onClick={() => dispatch(deleteContact(contact.id))}
@@ -19,19 +19,5 @@ export const ContactListItem = ({ contact }) => {
         delete
       </button>
     </li> 
-
-    // <li key={contact.id}>
-    //   <div className={styles['item-container']}>
-    //     <span>{`${contact.name}: ${contact.phone}`}</span>
-    //     <button
-    //       className={styles.btn}
-    //       type="button"
-    //       disabled={isLoading}
-    //       onClick={() => dispatch(deleteContact(contact.id))}
-    //     >
-    //       Delete
-    //     </button>
-    //   </div>
-    // </li>
   );
 };

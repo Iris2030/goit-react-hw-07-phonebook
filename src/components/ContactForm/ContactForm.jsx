@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import s from "./Form.module.css";
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from '../../redux/contacts/operations';
-import { getContacts, getLoadingStatus } from '../../redux/contacts/selectors';
+import { getLoadingStatus } from '../../redux/contacts/selectors';
 // import styles from './styles.module.css';
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
 
-  const contacts = useSelector(getContacts);
   const isLoading = useSelector(getLoadingStatus);
 
   const [name, setName] = useState('');
@@ -23,23 +22,23 @@ export const ContactForm = () => {
     SET_VALUE_MAP[name](value);
   };
 
-  const checkNameDuplicate = name => {
-    return contacts.some(
-      contact => contact.name.toLowerCase() === name.toLowerCase()
-    );
-  };
+  const isNameValid = () => /^[a-zA-Z' -]+$/.test(name);
+  const isPhoneValid = () => /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/.test(phone);
 
   const handlerAddContact = event => {
     event.preventDefault();
-    if (checkNameDuplicate(name)) {
-      alert(`${name} is already in contacts`);
+    if (!isNameValid()) {
+      alert('Please enter a valid name');
+      return;
+    }
+    if (!isPhoneValid()) {
+      alert('Please enter a valid phone number');
       return;
     }
     dispatch(addContact({ name, phone }));
     setName('');
     setPhone('');
   };
-
   return (
      <form onSubmit={handlerAddContact}>
             <label className={s.label}>Name</label>
@@ -49,7 +48,6 @@ export const ContactForm = () => {
              onChange={handleInputChange}
              type="text"
              name="name"
-             pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
              title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
              required
            />
@@ -61,7 +59,6 @@ export const ContactForm = () => {
              onChange={handleInputChange}
              type="tel"
              name="number"
-             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
              title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
              required
            />
@@ -72,100 +69,3 @@ export const ContactForm = () => {
          </form>
   );
 };
-
-
-
-
-
-
-// import { useState } from "react";
-// import s from "./Form.module.css";
-// import PropTypes from "prop-types";
-// import { useSelector, useDispatch } from "react-redux";
-// import { addContact } from '../../redux/contacts/operations';
-// import { useAddContactMutation } from "../../redux/slice";
-// import Notiflix from "notiflix";
-// import Loader from "../Loader/Loader";
-
-// export const  ContactForm = () => {
-//   const [name, setName] = useState("");
-//   const [number, setNumber] = useState("");
-//   const [addContactMutation, { isLoading }] = useAddContactMutation();
-
-//   const contacts = useSelector(state => state.contacts.items);
-//   const dispatch = useDispatch();
-
-//   const handleInput = (event) => {
-//     const { name, value } = event.target;
-
-//     switch (name) {
-//       case "name":
-//         setName(value);
-//         break;
-
-//       case "number":
-//         setNumber(value);
-//         break;
-
-//       default:
-//         return;
-//     }
-//   };
-
-//   const handleSubmit = (event) => {
-//     event.preventDefault();
-
-//     const contactNames = contacts.map((contact) => contact.name);
-
-//     if (contactNames.includes(name)) {
-//       alert(`${name} is already in contacts`);
-//       resetForm();
-//       return;
-//     }
-
-//     addContactMutation({ name, number }); // Using Redux Toolkit Query mutation
-//     Notiflix.Notify.success(`${name} added to contacts`);
-//     resetForm();
-//   };
-
-//   const resetForm = () => {
-//     setName("");
-//     setNumber("");
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <label className={s.label}>Name</label>
-//       <input
-//         className={s.input}
-//         value={name}
-//         onChange={handleInput}
-//         type="text"
-//         name="name"
-//         pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-//         title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-//         required
-//       />
-
-//       <label className={s.label}>Number</label>
-//       <input
-//         className={s.input}
-//         value={number}
-//         onChange={handleInput}
-//         type="tel"
-//         name="number"
-//         pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-//         title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-//         required
-//       />
- 
-//       <button className={s.button} type="submit" disabled={isLoading}>
-//         Add contact {isLoading && '...'}
-//       </button>  
-//     </form>
-//   );
-// }
-
-// ContactForm.propTypes = {
-//   contacts: PropTypes.array.isRequired,
-// };
